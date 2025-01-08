@@ -1,44 +1,36 @@
-import { SxProps, TextFieldProps, Theme } from '@mui/material'
-import React, { ChangeEvent } from 'react'
-import { KeyboardEvent } from 'react'
-import {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldPath,
-  FieldValues,
-  PathValue,
-  UseControllerProps,
-  UseFormStateReturn
-} from 'react-hook-form'
-export interface InputItemProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>
-  extends UseControllerProps<TFieldValues, TName> {
-  label?: React.ReactNode
-  subLabel?: React.ReactNode
-  required?: boolean
-  showErrorMessage?: boolean
-  textFieldProps?: TextFieldProps
-  sxBox?: SxProps<Theme>
-  sxInput?: SxProps<Theme>
-  sxLabel?: SxProps<Theme>
-  sxSubLabel?: SxProps<Theme>
-  maxLength?: number
-  error?: boolean
-  onChangeInput?: (value: ChangeEvent<HTMLInputElement>) => void
-  onBlur?: VoidFunction
-  renderInput?: ({
-    field,
-    fieldState,
-    formState
-  }: {
-    field: ControllerRenderProps<TFieldValues, TName>
-    fieldState: ControllerFieldState
-    formState: UseFormStateReturn<TFieldValues>
-  }) => React.ReactElement
-  onClickDelete?: (value: PathValue<TFieldValues, TName>) => void
-  onClickBtnSearch?: (value: PathValue<TFieldValues, TName>) => void
-  regex?: RegExp
-  typeRegex?: 'KOREAN' | undefined
-  autoFill?: boolean
-}
+import { FocusEventHandler } from "react";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
-export const RADIUS_TEXTFIELD = 10
+export interface InputProps {
+  label?: string;
+  name: string;
+  control: any;
+  endAdornment?: JSX.Element;
+  startAdornment?: JSX.Element;
+  type?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
+  endClick?: () => void;
+  onBlur?:
+    | FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    | undefined;
+  disabled?: boolean;
+  className?: string;
+  error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  placeholder?: string;
+  trigger?: any;
+  triggerName?: string | string[];
+  align?: string;
+  border?: boolean;
+  areaText?: string;
+  countCharacter?: number;
+  showCount?: boolean;
+  multiline?: boolean;
+  maxLength?: number;
+  limitCharacter?: number;
+  preventNumber?: boolean;
+  suggestPopover?: string;
+  required?: boolean;
+  newPassword?: boolean;
+  placeHolder?: boolean;
+  version?: string;
+}

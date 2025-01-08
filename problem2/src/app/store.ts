@@ -1,10 +1,8 @@
 import loadingReducer from "components/loading-custom/loading-slice";
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-// import userReducer from "pages/Login/userSlice";
 
 export const store = configureStore({
   reducer: {
-    // user: userReducer,
     loading: loadingReducer,
   },
 });

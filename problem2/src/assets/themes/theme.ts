@@ -257,6 +257,8 @@ export const getTextStyles = (
 const typoCategories = {
   large_title: getTextStyles(40, 100, 700, 0),
   title_1_bold: getTextStyles(36, 120, 700, 0),
+  title_2_bold: getTextStyles(24, 120, 700, 0),
+  body_16_bold: getTextStyles(16, 120, 500, 0),
 };
 
 export type BreakpointKeys = keyof typeof breakpoints;
