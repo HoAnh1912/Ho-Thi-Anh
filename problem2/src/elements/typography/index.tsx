@@ -71,7 +71,7 @@ const Typography = ({
       color={plainColor}
       component={component}
       {...rest}
-      variant={cate || variant}
+      variant={cate || (variant as any)}
     >
       {children}
     </MTypography>
