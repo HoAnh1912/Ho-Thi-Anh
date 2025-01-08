@@ -1,0 +1,105 @@
+Computational Inefficiencies and Anti-Patterns:
+
+1.Overuse of useMemo:
+
+Using useMemo for sorting and filtering is complex and involves multiple function calls. This can cause unnecessary computations when dependencies change often.
+
+2.Inefficient Filtering Condition:
+
+The filter condition uses lhsPriority > -99, but lhsPriority is not defined. It should be balancePriority instead.
+
+3.Using any Type for blockchain in getPriority:
+
+The getPriority function uses any for the blockchain parameter, which isn't type-safe. Use a specific type for better reliability.
+
+4.Redundant Mapping for Formatted Balances:
+
+The formattedBalances array is created but never used. The rows array should be mapped directly from sortedBalances.
+
+5.Use of index as Key in Mapping:
+
+Using index as a key can cause performance issues during re-renders. Use a unique identifier like balance.currency instead.
+
+Refactored Code:
+Here’s a refactored version of the code addressing the inefficiencies and anti-patterns:
+
+```javascript
+interface WalletBalance {
+  currency: string;
+  amount: number;
+  blockchain: string;
+}
+interface FormattedWalletBalance extends WalletBalance {
+  formatted: string;
+}
+
+interface Props extends BoxProps {}
+
+const WalletPage: React.FC<Props> = (props: Props) => {
+  const { children, ...rest } = props;
+  const balances = useWalletBalances();
+  const prices = usePrices();
+
+  const getPriority = (blockchain: string): number => {
+    const priorities: { [key: string]: number } = {
+      Osmosis: 100,
+      Ethereum: 50,
+      Arbitrum: 30,
+      Zilliqa: 20,
+      Neo: 20,
+    };
+    return priorities[blockchain] ?? -99;
+  };
+
+  const sortedBalances = useMemo(() => {
+    return balances
+      .filter((balance: WalletBalance) => {
+        const balancePriority = getPriority(balance.blockchain);
+        return balancePriority > -99 && balance.amount > 0;
+      })
+      .sort((lhs: WalletBalance, rhs: WalletBalance) => {
+        const leftPriority = getPriority(lhs.blockchain);
+        const rightPriority = getPriority(rhs.blockchain);
+        return rightPriority - leftPriority;
+      });
+  }, [balances]);
+
+  const rows = sortedBalances.map((balance: WalletBalance) => {
+    const usdValue = prices[balance.currency] * balance.amount;
+    const formattedBalance = balance.amount.toFixed();
+    return (
+      <WalletRow
+        className={classes.row}
+        key={balance.currency}
+        amount={balance.amount}
+        usdValue={usdValue}
+        formattedAmount={formattedBalance}
+      />
+    );
+  });
+
+  return <div {...rest}>{rows}</div>;
+};
+```
+
+Improvements Made:
+
+1.Type-Safe getPriority Function:
+
+Used a specific type (string) for the blockchain parameter and a map for priorities.
+
+2.Corrected Filtering Condition:
+
+Replaced lhsPriority with balancePriority and ensured the condition checks the correct logic.
+
+3.Eliminated Redundant Mapping:
+
+Removed the unused formattedBalances array and formatted the balance directly within the rows mapping.
+
+4.Improved Key Handling:
+
+Used balance.currency as the key in the rows array mapping instead of index for better performance and stability.
+
+5.Optimized Sorting and Filtering:
+
+Combined filtering and sorting logic to minimize iterations and improve performance.
