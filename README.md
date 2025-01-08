@@ -17,7 +17,7 @@ I am applying for the Frontend Developer position and I have completed 3 code ch
   1. Clone the repository.
   2. Go to the `problem2` folder with `cd problem2`.
   3. Install dependencies with `yarn install` or `npm install`.
-  4. Run the project with `yarn dev`.
+  4. Run the project with `yarn dev` or `npm run dev`
 
 ## Problem 3: Messy React
 
